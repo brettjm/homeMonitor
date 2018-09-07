@@ -130,17 +130,17 @@ void sensorControl_tick()
 
 void runTest()
 {
-   uint8_t pin = 10;
+   uint8_t pin = 5;
 
    if (!gpio_init())
       return;
 
    gpio_fSel(pin);
 
-   // for (int i = 0; i < 1000; i++){}  // Wait for pin to set
+   for (int i = 0; i < 1000; i++){}  // Wait for pin to set
 
-   // // Read lev reg after pin 5 is set
-   // printf("Pin 5 old: %d\n\r", ((*read_lev & (1 << pin)) >> pin));
+   // Read lev reg after pin 5 is set
+   printf("Pin 5 old: %d\n\r", ((*read_lev & (1 << pin)) >> pin));
 
    // for (int i = 0; i < 1000; i++){}  // Wait for pin to set
 

@@ -67,19 +67,20 @@ uint32_t gpio_fSel(uint8_t pin)
    // Base + offset mapped by f_sel 
    // register[0-5] which hold 10 pins each
    fsel_addr = (uint32_t *)gpio_addr + (pin/10);
-   printf("addr new: %x\n\r", *fsel_addr);
+   
    // first bit number of 3-bit mask
    uint32_t fsel_baseBit = (pin % 10) * 3;  
 
    // fsel mask (b111) << baseBit
    uint32_t fsel_mask = GPFSEL_MASK << fsel_baseBit;  
 
-   // fsel output mask (b001) << baseBit
+   // fsel pin is output mask (b001) << baseBit
    uint32_t outputMask = GPFSEL_OUTPUT << fsel_mask;  
 
    // sets pin as output
    uint32_t fselValue = (*fsel_addr & (~fsel_mask)) | outputMask;  
-
+   *fsel_addr = fselValue;
+   
    return 0;
 }
 
