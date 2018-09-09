@@ -1,6 +1,8 @@
 #include <stdio.h>
 #include <stdbool.h>
 
+#include "gpio.h"
+
 #define TXPIN 0
 #define RXPIN 1
 #define DEBOUNCE_MAX 60  // Number of clock ticks for debounce
@@ -128,25 +130,34 @@ void sensorControl_tick()
 
 void runTest()
 {
+   uint8_t pin = 5;
+
+   if (!gpio_init())
+      return 0;
+
+   gpio_funcSel(pin);
+
    for (int i = 0; i < 1000; i++){}  // Wait for pin to set
 
    // Read lev reg after pin 5 is set
-   printf("Pin 5 old: %d\n\r", ((*read_lev & (1 << pin)) >> pin));
+   printf("Pin %d old: %d\n\r", pin, gpio_readLev(pin));
 
-   for (int i = 0; i < 1000; i++){}  // Wait for pin to set
+   // for (int i = 0; i < 1000; i++){}  // Wait for pin to set
 
-   // Read lev reg after pin 5 is set
-   printf("Pin 5 old: %d\n\r", ((*read_lev & (1 << pin)) >> pin));
+   // // Read lev reg after pin 5 is set
+   // printf("Pin 5 new: %d\n\r", ((*read_lev & (1 << pin)) >> pin));
+
+   gpio_deinit();
 }
 
 int main()
 {
    runTest();
 
-   while(true)
-   {
-      sensorControl_tick();
-   }
+   // while(true)
+   // {
+   //    sensorControl_tick();
+   // }
 
    return 0;
 }

@@ -5,9 +5,9 @@
 
 void gpio_init();
 void gpio_deinit();
-uint32_t gpio_funcSel();
-uint32_t gpio_setOut();
-uint32_t gpio_clearOut();
-uint32_t gpio_readLev();
+void gpio_funcSel(uint8_t pin);
+void gpio_setOut(uint8_t pin);
+void gpio_clearOut(uint8_t pin);
+uint32_t gpio_readLev(uint8_t pin);
 
 #endif /* GPIO_H */
