@@ -1,9 +1,10 @@
 #include <stdio.h>
 #include <stdbool.h>
+#include <stdint.h>
 
 #include "gpio.h"
 
-#define TXPIN 0
+#define TXPIN 5
 #define RXPIN 1
 #define DEBOUNCE_MAX 60  // Number of clock ticks for debounce
 #define SENSOR_TRIPPED 1
@@ -12,20 +13,21 @@
 int cameraCounter = 0;
 
 // dl v4l2 driver, use libv4l2
+// https://www.raspberrypi.org/forums/viewtopic.php?t=174098
 
 void activateSensor()
 {
-   
+   gpio_setOut(TXPIN);
 }
 
 void deactivateSensor()
 {
-   
+   gpio_clearOut(TXPIN);   
 }
 
 int readSensor()
 {
-   return 0;
+   return gpio_readLev(RXPIN);
 }
 
 void activateCamera()
