@@ -27,6 +27,7 @@ volatile void *gpio_addr;
 volatile uint32_t *fsel_addr;
 volatile uint32_t *set_out;
 volatile uint32_t *clear_out;
+volatile uint32_t *read_lev;
 
 bool gpio_init()
 {
@@ -62,7 +63,7 @@ void gpio_deinit()
 }
 
 // Define the operation of the gpio pins
-void gpio_funcSel(uint8_t pin)
+void gpio_fSel(uint8_t pin)
 {
    /* 
       Base + offset mapped by f_sel register[0-5] which hold 10 pins each
@@ -76,11 +77,12 @@ void gpio_funcSel(uint8_t pin)
    // fsel mask (b111) << baseBit
    uint32_t fsel_mask = GPFSEL_MASK << fsel_baseBit;  
 
-   // fsel output mask (b001) << baseBit
+   // fsel pin is output mask (b001) << baseBit
    uint32_t outputMask = GPFSEL_OUTPUT << fsel_mask;  
 
    // sets pin as output
    uint32_t fselValue = (*fsel_addr & (~fsel_mask)) | outputMask;  
+   *fsel_addr = fselValue;
 }
 
 void gpio_setOut(uint8_t pin)
@@ -103,13 +105,8 @@ void gpio_clearOut(uint8_t pin)
 
 uint32_t gpio_readLev(uint8_t pin)
 {
-   volatile uint32_t *read_lev;
-
    // Read pin from level register
    read_lev = (uint32_t *)(gpio_addr + GPLEV_BASE + pin/32);
 
    return ((*read_lev & (1 << pin)) >> pin));
 }
-
-
-

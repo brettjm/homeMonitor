@@ -133,9 +133,9 @@ void runTest()
    uint8_t pin = 5;
 
    if (!gpio_init())
-      return 0;
+      return;
 
-   gpio_funcSel(pin);
+   gpio_fSel(pin);
 
    for (int i = 0; i < 1000; i++){}  // Wait for pin to set
 
