@@ -141,13 +141,15 @@ void runTest()
 
    for (int i = 0; i < 1000; i++){}  // Wait for pin to set
 
-   // Read lev reg after pin 5 is set
+   // Read lev reg
    printf("Pin %d old: %d\n\r", pin, gpio_readLev(pin));
 
-   // for (int i = 0; i < 1000; i++){}  // Wait for pin to set
+   gpio_setOut(pin);
 
-   // // Read lev reg after pin 5 is set
-   // printf("Pin 5 new: %d\n\r", ((*read_lev & (1 << pin)) >> pin));
+   for (int i = 0; i < 1000; i++){}  // Wait for pin to set
+
+   // Read lev reg
+   printf("Pin %d old: %d\n\r", pin, gpio_readLev(pin));
 
    gpio_deinit();
 }

@@ -108,5 +108,5 @@ uint32_t gpio_readLev(uint8_t pin)
    // Read pin from level register
    read_lev = (uint32_t *)(gpio_addr + GPLEV_BASE + pin/32);
 
-   return ((*read_lev & (1 << pin)) >> pin));
+   return ((*read_lev & (1 << pin)) >> pin);
 }
