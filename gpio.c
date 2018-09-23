@@ -59,7 +59,7 @@ void gpio_fSel(uint8_t pin, uint8_t func)
       Base + offset mapped by f_sel register[0-5] which hold 10 pins each
       Addresses are a contiguous set of 32 bits each
    */
-   fsel_addr = (uint32_t *)gpio_addr + pin/10;
+   volatile uint32_t fsel_addr = (uint32_t *)gpio_addr + pin/10;
    
    // first bit number of 3-bit mask
    uint32_t fsel_baseBit = (pin % 10) * 3;  
