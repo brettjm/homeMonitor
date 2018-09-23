@@ -10,6 +10,8 @@
 #define SENSOR_TRIPPED 1
 #define CAMERA_TIMEOUT 6000 // FIX
 
+#define DEBUG
+
 int cameraCounter = 0;
 
 // dl v4l2 driver, use libv4l2
@@ -132,43 +134,54 @@ void sensorControl_tick()
 
 void runTest()
 {
-   uint8_t pin = 5;
-
-   if (!gpio_init())
-      return;
-
    // Set pin as output
-   gpio_fSel(pin, OUTPUT);
+   gpio_fSel(TXPIN, GPIO_OUTPUT);
 
    // Read pin
    for (int i = 0; i < 1000; i++){}  // Wait for pin to set
-   printf("Pin %d init: %d\n\r", pin, gpio_readLev(pin));
+   printf("Pin %d init: %d\n\r", TXPIN, gpio_readLev(TXPIN));
 
    // Set pin high
-   gpio_setOut(pin);
+   gpio_setOut(TXPIN);
 
    // Read pin
    for (int i = 0; i < 1000; i++){}  // Wait for pin to set
-   printf("Pin %d set: %d\n\r", pin, gpio_readLev(pin));
+   printf("Pin %d set: %d\n\r", TXPIN, gpio_readLev(TXPIN));
 
    // Set pin low
-   gpio_clearOut(pin);
+   gpio_clearOut(TXPIN);
 
    // Read pin
    for (int i = 0; i < 1000; i++){}  // Wait for pin to set
-   printf("Pin %d clear: %d\n\r", pin, gpio_readLev(pin));
+   printf("Pin %d clear: %d\n\r", TXPIN, gpio_readLev(TXPIN));
 
    gpio_deinit();
 }
 
 int main()
 {
-   runTest();
+   // Init gpio
+   if (!gpio_init())
+      return 0;
 
-   // while(true)
-   // {
-   //    sensorControl_tick();
-   // }
+#ifndef DEBUG
+
+   // Set pin functions
+   gpio_fSel(TXPIN, GPIO_OUTPUT);
+   gpio_fSel(RXPIN, GPIO_INPUT);
+
+   // Run Control state machine
+   while(true)
+   {
+      sensorControl_tick();
+   }
+
+#else
+   runTest();
+   
+#endif
+
+   gpio_deinit();  // De-init gpio
 
    return 0;
 }
