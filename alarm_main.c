@@ -137,19 +137,26 @@ void runTest()
    if (!gpio_init())
       return;
 
+   // Set pin as output
    gpio_fSel(pin, OUTPUT);
 
+   // Read pin
    for (int i = 0; i < 1000; i++){}  // Wait for pin to set
+   printf("Pin %d init: %d\n\r", pin, gpio_readLev(pin));
 
-   // Read lev reg
-   printf("Pin %d old: %d\n\r", pin, gpio_readLev(pin));
-
+   // Set pin high
    gpio_setOut(pin);
 
+   // Read pin
    for (int i = 0; i < 1000; i++){}  // Wait for pin to set
+   printf("Pin %d set: %d\n\r", pin, gpio_readLev(pin));
 
-   // Read lev reg
-   printf("Pin %d old: %d\n\r", pin, gpio_readLev(pin));
+   // Set pin low
+   gpio_clearOut(pin);
+
+   // Read pin
+   for (int i = 0; i < 1000; i++){}  // Wait for pin to set
+   printf("Pin %d clear: %d\n\r", pin, gpio_readLev(pin));
 
    gpio_deinit();
 }
