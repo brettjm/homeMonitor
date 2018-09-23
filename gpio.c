@@ -5,18 +5,20 @@
 #include <stdbool.h>
 #include <sys/mman.h>
 
+/* Defines                                                                   */
 #define PERI_BASE_ADDR  0x20000000
 #define GPIO_START_ADDR 0x00200000
 #define GPIO_END_ADDR   0x002000B0
 #define GPIO_SIZE       0x01000000
 #define GPIO_OFFSET     0
 
-#define GPSET_BASE    0x1C        // Set output
-#define GPCLR_BASE    0x28        // Clear output 
-#define GPLEV_BASE    0x34        // Level read
+#define GPSET_BASE    0x1C         // Set output
+#define GPCLR_BASE    0x28         // Clear output 
+#define GPLEV_BASE    0x34         // Level read
 
-#define GPFSEL_MASK 0x07   // b111
+#define GPFSEL_MASK 0x07           // b111
 
+/* Global Variables                                                          */
 size_t gpio_size = 0x01000000;
 
 int fd;
@@ -30,6 +32,7 @@ bool gpio_init()
       printf("Error reading gpiomem\n\r");
       return false;
    }
+
    /*
       mmap functionality:
 
@@ -44,17 +47,9 @@ bool gpio_init()
 
 void gpio_deinit()
 {
-   // Unmap gpio pointer
-   munmap(&gpio_addr, GPIO_SIZE);
-   
-   // Nullify pointers
-   gpio_addr = NULL;
-   fsel_addr = NULL;
-   set_out   = NULL;
-   read_lev  = NULL;
-
-   // Unmap /dev/gpiomem
-   close(fd);
+   munmap(&gpio_addr, GPIO_SIZE);  // Unmap gpio pointer
+   gpio_addr = NULL;  // Nullify pointer
+   close(fd);  // Unmap /dev/gpiomem
 }
 
 // Define the operation of the gpio pins
