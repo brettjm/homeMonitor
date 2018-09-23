@@ -137,7 +137,7 @@ void runTest()
    if (!gpio_init())
       return;
 
-   gpio_fSel(pin);
+   gpio_fSel(pin, OUTPUT);
 
    for (int i = 0; i < 1000; i++){}  // Wait for pin to set
 
