@@ -1,11 +1,12 @@
 #include <stdio.h>
 #include <stdbool.h>
 #include <stdint.h>
+#include <unistd.h>
 
 #include "gpio.h"
 
-#define TXPIN 5
-#define RXPIN 1
+#define TXPIN 7
+#define RXPIN 8
 #define DEBOUNCE_MAX 60  // Number of clock ticks for debounce
 #define SENSOR_TRIPPED 1
 #define CAMERA_TIMEOUT 6000 // FIX
@@ -158,8 +159,20 @@ void runTest()
    gpio_deinit();
 }
 
+void blinkLed(bool toggle)
+{
+   printf("%d\n\r", (int)toggle);
+   
+   if (toggle)
+      gpio_setOut(TXPIN);
+   else
+      gpio_clearOut(TXPIN);
+}
+
 int main()
 {
+   bool toggle = true;
+
    // Init gpio
    if (!gpio_init())
       return 0;
@@ -177,7 +190,17 @@ int main()
    }
 
 #else
-   runTest();
+   // runTest();
+
+   // Set pin as output
+   gpio_fSel(TXPIN, GPIO_OUTPUT);
+
+   for (int i = 0; i < 10; i++)
+   {
+      blinkLed(toggle);
+      sleep(1);
+      toggle = !toggle;
+   }
    
 #endif
 
