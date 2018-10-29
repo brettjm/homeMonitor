@@ -89,5 +89,6 @@ void sensorControl_tick()
 
 void loop() 
 {
-  sensorControl_tick();
+  Serial.print(analogRead(sensorPin));
+//  sensorControl_tick();
 }
