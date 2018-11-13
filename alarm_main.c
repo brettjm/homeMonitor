@@ -2,7 +2,7 @@
 #include <stdbool.h>
 #include <stdint.h>
 #include <unistd.h>
-
+#include <signal.h>
 #include "gpio.h"
 
 #define TXPIN 7
@@ -13,10 +13,18 @@
 
 #define DEBUG
 
+static volatile int keepRunning = 1;
+
 int cameraCounter = 0;
 
 // dl v4l2 driver, use libv4l2
 // https://www.raspberrypi.org/forums/viewtopic.php?t=174098
+
+void intHandler(int dummy) 
+{
+   keepRunning = 0;
+}
+
 
 void activateSensor()
 {
@@ -177,7 +185,9 @@ void blinkLed(bool toggle)
 int main()
 {
    bool toggle = true;
-
+   
+   signal(SIGINT, intHandler);
+   
    // Init gpio
    if (!gpio_init())
       return 0;
@@ -189,7 +199,7 @@ int main()
    gpio_fSel(RXPIN, GPIO_INPUT);
 
    // Run Control state machine
-   while(true)
+   while(keepRunning)
    {
       sensorControl_tick();
    }
@@ -208,7 +218,8 @@ int main()
    }
    
 #endif
-
+   
+   printf("Shutting down\n\r");
    gpio_deinit();  // De-init gpio
 
    return 0;
