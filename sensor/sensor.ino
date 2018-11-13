@@ -1,11 +1,11 @@
 #define TXPIN 0
 #define RXPIN 1
-#define TRIP_THRESHOLD 4  // Voltage level from photoresistor
+#define TRIP_THRESHOLD 600  // Voltage level from photoresistor
 #define DEBOUNCE_MAX 60  // Number of clock ticks for debounce
 
 // Potentiometer wiper (middle terminal) connected 
 // to analog pin 3. Outside leads to ground and +5V
-int sensorPin = A0;
+int sensorPin = 5;
 int debounceTimer = 0;
 
 void setup() 

@@ -101,17 +101,20 @@ void sensorControl_tick()
       break;
    case activate_sensor_st:
       activateSensor();
+      printf("wait sensor\n\r");
       currentState = wait_sensor_st;
       break;
    case wait_sensor_st:
       if (readSensor() == SENSOR_TRIPPED)
-         currentState = activate_camera_st;
+         currentState = deactivate_sensor_st;
       break;
    case deactivate_sensor_st:
+      printf("deactivate sensor\n\r");
       deactivateSensor();
       currentState = activate_camera_st;
       break;
    case activate_camera_st:
+      printf("activate camera\n\r");
       activateCamera();
       currentState = hold_camera_st;
       break;
@@ -120,10 +123,12 @@ void sensorControl_tick()
          currentState = deactivate_camera_st;
       break;
    case deactivate_camera_st:
+      printf("deactivate camera\n\r"); 
       deactivateCamera();
       currentState = handle_footage_st;
       break;
    case handle_footage_st:
+      printf("handle footage\n\r");
       handleFootage();
       currentState = init_st;
       break;
