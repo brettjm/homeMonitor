@@ -11,7 +11,7 @@
 #define SENSOR_TRIPPED 1
 #define CAMERA_TIMEOUT 6000 // FIX
 
-#define DEBUG
+// #define DEBUG
 
 static volatile int keepRunning = 1;
 
