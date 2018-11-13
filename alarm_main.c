@@ -35,7 +35,7 @@ int readSensor()
 
 void activateCamera()
 {
-   system(raspivid -t 5000 -o - > capture.h264);
+   // system(raspivid -t 5000 -o - > capture.h264);
 }
 
 void deactivateCamera()
