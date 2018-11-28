@@ -1,19 +1,17 @@
-#define TXPIN 0
-#define RXPIN 1
+#define TXPIN 2
+#define RXPIN 3
+#define SENSOR_PIN 5
 #define TRIP_THRESHOLD 600  // Voltage level from photoresistor
 #define DEBOUNCE_MAX 60  // Number of clock ticks for debounce
 
-// Potentiometer wiper (middle terminal) connected 
-// to analog pin 3. Outside leads to ground and +5V
-int sensorPin = 5;
 int debounceTimer = 0;
 
 void setup() 
 {
   Serial.begin(9600);  //  setup serial
   
-  pinMode(TXPIN, INPUT);
-  pinMode(RXPIN, OUTPUT);
+  pinMode(TXPIN, OUTPUT);
+  pinMode(RXPIN, INPUT);
 
   digitalWrite(TXPIN, LOW);
 }
@@ -44,7 +42,7 @@ void sensorControl_tick()
     case waitReset_st:
       break;
     default:
-      Serial.print("tick state default error");
+      Serial.println("tick state default error");
       break;
   }
 
@@ -52,26 +50,33 @@ void sensorControl_tick()
   switch (currentState)
   {
     case init_st:
+      Serial.println("init state");
       digitalWrite(TXPIN, LOW);  // Reset transmit signal
       debounceTimer = 0;  // Reset debounce timer
       currentState = wait_activate_st;
       break;
     case wait_activate_st:
       if (digitalRead(RXPIN) == HIGH)
+      {
         currentState = readSensor_st;
+        Serial.println("read sensor");
+      }
       break;
     case readSensor_st:
       // read sensor input
-      if (analogRead(sensorPin) <= TRIP_THRESHOLD)
+      if (analogRead(SENSOR_PIN) <= TRIP_THRESHOLD)
+      { 
         currentState = debounceSensor_st;
+      }
       break;
     case debounceSensor_st:
       // Debounce sensor
       if (debounceTimer >= DEBOUNCE_MAX)
       {
         // Check sensor after debounce
-        if (analogRead(sensorPin) <= TRIP_THRESHOLD)
+        if (analogRead(SENSOR_PIN) <= TRIP_THRESHOLD)
         {
+          Serial.println("line tripped");
           digitalWrite(TXPIN, HIGH);
           currentState = waitReset_st;
         }
@@ -79,16 +84,21 @@ void sensorControl_tick()
       break;
     case waitReset_st:
       if (digitalRead(RXPIN) == LOW)
-        currentState = init_st;
+      {
+        Serial.println("Resetting");
+        currentState = init_st;        
+      }
       break;
     default:
-      Serial.print("tick state default error");
+      Serial.println("tick state default error");
       break;
   }
 }
 
 void loop() 
 {
-//  Serial.print(analogRead(sensorPin));
+//  Serial.print(analogRead(SENSOR_PIN));
+//  Serial.println(digitalRead(RXPIN));
+//  delay(500);
   sensorControl_tick();
 }
