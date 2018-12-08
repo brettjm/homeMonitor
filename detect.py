@@ -16,7 +16,6 @@ class MyMotionDetector(picamera.array.PiMotionAnalysis):
 with picamera.PiCamera() as camera:
     camera.resolution = (640, 480)
     camera.framerate = 30
-    camera.start_preview()
     camera.start_recording(
         '/dev/null', format='h264',
         motion_output=MyMotionDetector(camera)
