@@ -6,7 +6,11 @@ with picamera.PiCamera() as camera:
    camera.resolution = (320, 240)
    camera.framerate = 24
    time.sleep(2)
+
+   # Create empty array to store current image
    image = np.empty((240 * 320 * 3), dtype=np.uint8)
+
+   # Capture the first image in bgr format
    camera.capture(image, 'bgr')
    
    # Initialize estimation arrays
